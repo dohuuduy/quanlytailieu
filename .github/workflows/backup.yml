@@ -2,40 +2,35 @@ name: Supabase CLI - Scheduled Run
 
 on:
   schedule:
-    - cron: '0 1 */5 * *'  # 01:00 UTC tương đương 08:00 GMT+7
-  workflow_dispatch:       # Cho phép chạy thủ công nếu cần
+    # Chạy mỗi 5 ngày lúc 08:00 GMT+7 → 01:00 UTC
+    - cron: '0 1 */5 * *'
+  workflow_dispatch:
 
 jobs:
   run-supabase-cli:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF:           ${{ secrets.PROJECT_REF }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-- name: Install Supabase CLI
-  run: |
-    SUPABASE_VERSION=$(curl -s https://api.github.com/repos/supabase/cli/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-    curl -sL "https://github.com/supabase/cli/releases/download/v${SUPABASE_VERSION}/supabase_${SUPABASE_VERSION}_linux_amd64.tar.gz" -o supabase.tar.gz
-    tar -xzf supabase.tar.gz supabase
-    chmod +x supabase
-    sudo mv supabase /usr/local/bin/supabase
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest   # hoặc cụ thể: "2.31.2" 
 
-
-      - name: Verify Supabase CLI
+      - name: Verify Supabase CLI version
         run: supabase --version
 
-      - name: Authenticate with Supabase
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: |
-          mkdir -p ~/.supabase
-          echo "[global]" > ~/.supabase/config.toml
-          echo "access_token = \"$SUPABASE_ACCESS_TOKEN\"" >> ~/.supabase/config.toml
+      - name: Authenticate Supabase CLI
+        run: supabase login --token $SUPABASE_ACCESS_TOKEN
 
-      - name: Run Supabase command (example)
+      - name: Run Supabase command (ví dụ: dump DB)
         run: |
-          supabase db dump --file=backup.sql
-          echo "Dumped database to backup.sql"
+          supabase db dump --project-ref $PROJECT_REF --file=backup.sql
+          echo "📦 Database dumped to backup.sql"
 
-      # Optional: Gửi file backup.sql qua email, S3, GDrive, v.v...
+      # Nếu muốn gửi email / upload artifact / chính sách khác thì thêm steps ở đây
