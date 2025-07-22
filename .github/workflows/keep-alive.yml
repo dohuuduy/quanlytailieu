@@ -1,58 +1,71 @@
+name: Keep Supabase Alive
+
 on:
   schedule:
-    # Chạy mỗi 5 ngày vào lúc 12:00 UTC
+    # Chạy mỗi 5 ngày vào 12:00 UTC
     - cron: '0 12 */5 * *'
-  workflow_dispatch: # Cho phép chạy thủ công
+  workflow_dispatch: # Cho phép chạy thủ công từ GitHub UI
 
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          
+
       - name: Install dependencies
         run: |
           npm init -y
           npm install @supabase/supabase-js
-          
-      - name: Keep database alive
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Write keep-alive script
         run: |
           cat > ping.js << 'EOF'
           const { createClient } = require('@supabase/supabase-js');
-          
+
           const supabase = createClient(
             process.env.SUPABASE_URL,
             process.env.SUPABASE_KEY
           );
-          
+
           async function keepAlive() {
             try {
-              // Thực hiện query đơn giản
               const { data, error } = await supabase
-                .from('pg_stat_database')
-                .select('datname')
+                .from('keep_alive') // 🔁 Tên bảng thực tế
+                .select('id')
                 .limit(1);
-              
+
               if (error) {
-                console.log('Keep alive query executed');
+                console.error('Query error:', error.message);
+                process.exit(1); // Đánh dấu thất bại rõ ràng
               } else {
-                console.log('Database is alive:', data);
+                console.log('✅ Database is alive. Sample data:', data);
               }
             } catch (err) {
-              console.log('Keep alive ping sent');
+              console.error('Unexpected error:', err.message);
+              process.exit(1);
             }
           }
-          
+
           keepAlive();
           EOF
-          
-          node ping.js
+
+      - name: Run keep-alive ping
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node ping.js
+
+      - name: Done
+        if: success()
+        run: echo "🎉 Supabase keep-alive ping completed successfully."
+
+      - name: Show error if failed
+        if: failure()
+        run: echo "❌ Ping failed. Check logs above for more details."
