@@ -1,0 +1,81 @@
+name: Backup Supabase Database
+
+on:
+  schedule:
+    # Chạy mỗi 5 ngày lúc 08:00 GMT+7 (tức 01:00 UTC)
+    - cron: '0 1 */5 * *'
+  workflow_dispatch: # Cho phép chạy thủ công từ GitHub UI
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Supabase CLI
+        run: npm install -g @supabase/cli
+
+      - name: Login to Supabase
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase login --token $SUPABASE_ACCESS_TOKEN
+
+      - name: Create backup folder and export database
+        env:
+          PROJECT_REF: ${{ secrets.PROJECT_REF }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          mkdir -p backups
+          DATE=$(date +%Y%m%d_%H%M%S)
+
+          # Dump schema
+          supabase db dump \
+            --project-ref $PROJECT_REF \
+            --password $DB_PASSWORD \
+            --file backups/schema_$DATE.sql \
+            --schema-only
+
+          # Dump data
+          supabase db dump \
+            --project-ref $PROJECT_REF \
+            --password $DB_PASSWORD \
+            --file backups/data_$DATE.sql \
+            --data-only
+
+      - name: Upload backup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_number }}
+          path: backups/
+          retention-days: 30
+
+      - name: Send success email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ Supabase Backup #${{ github.run_number }} Completed"
+          body: |
+            🎉 Backup thành công!
+            
+            - Run ID: ${{ github.run_id }}
+            - Time: ${{ github.run_started_at }}
+            - Artifacts: supabase-backup-${{ github.run_number }}
+
+            Bạn có thể tải backup từ GitHub Actions.
+          to: ${{ secrets.EMAIL_RECEIVER }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+
+      - name: Cleanup old backups (local only)
+        run: |
+          ls -1t backups/ | tail -n +8 | xargs -d '\n' -r rm --
