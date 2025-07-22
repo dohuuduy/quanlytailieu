@@ -3,7 +3,8 @@ name: Keep Supabase Alive
 on:
   schedule:
     # Chạy mỗi 5 ngày vào 12:00 UTC
-    - cron: '0 12 */5 * *'
+    - cron: '0 1 */5 * *'
+
   workflow_dispatch: # Cho phép chạy thủ công từ GitHub UI
 
 jobs:
