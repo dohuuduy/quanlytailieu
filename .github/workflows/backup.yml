@@ -13,11 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Supabase CLI from GitHub
-        run: |
-          curl -sL https://github.com/supabase/cli/releases/latest/download/supabase-linux-x64 -o supabase
-          chmod +x supabase
-          sudo mv supabase /usr/local/bin/supabase
+- name: Install Supabase CLI
+  run: |
+    SUPABASE_VERSION=$(curl -s https://api.github.com/repos/supabase/cli/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    curl -sL "https://github.com/supabase/cli/releases/download/v${SUPABASE_VERSION}/supabase_${SUPABASE_VERSION}_linux_amd64.tar.gz" -o supabase.tar.gz
+    tar -xzf supabase.tar.gz supabase
+    chmod +x supabase
+    sudo mv supabase /usr/local/bin/supabase
+
 
       - name: Verify Supabase CLI
         run: supabase --version
