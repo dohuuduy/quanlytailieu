@@ -1,5 +1,4 @@
 name: Keep Supabase Alive
-
 on:
   schedule:
     # Chạy mỗi 5 ngày vào 12:00 UTC
