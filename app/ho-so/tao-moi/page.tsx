@@ -27,6 +27,7 @@ const formSchema = z.object({
   loai_tai_lieu_id: z.string().min(1, 'Loại tài liệu là bắt buộc'),
   nguoi_ban_hanh_id: z.string().min(1, 'Người ban hành là bắt buộc'),
   tinh_trang: z.enum(['hieu_luc', 'cho_duyet', 'het_hieu_luc']),
+  link_tai_lieu: z.string().url('Link không hợp lệ').optional().or(z.literal('')),
   ghi_chu: z.string().optional(),
   tieu_chuan_ids: z.array(z.string()).optional()
 })
@@ -70,6 +71,7 @@ export default function TaoMoiHoSoPage() {
       loai_tai_lieu_id: '',
       nguoi_ban_hanh_id: '',
       tinh_trang: 'cho_duyet',
+      link_tai_lieu: '',
       ghi_chu: '',
       tieu_chuan_ids: []
     }
@@ -146,6 +148,7 @@ export default function TaoMoiHoSoPage() {
           loai_tai_lieu_id: data.loai_tai_lieu_id,
           nguoi_ban_hanh_id: data.nguoi_ban_hanh_id,
           tinh_trang: data.tinh_trang,
+          link_tai_lieu: data.link_tai_lieu || null,
           ghi_chu: data.ghi_chu || null
         })
         .select()
@@ -368,6 +371,27 @@ export default function TaoMoiHoSoPage() {
                         <SelectItem value="het_hieu_luc">Hết hiệu lực</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="link_tai_lieu"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link tài liệu</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="https://example.com/document.pdf" 
+                        type="url"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Link đến file tài liệu (URL hoặc đường dẫn). Để trống nếu chưa có.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -54,6 +54,18 @@ const navigation = [
   { name: 'Hồ sơ tài liệu', href: '/ho-so', icon: FileText },
   { name: 'Người dùng', href: '/nguoi-dung', icon: Users },
   { 
+    name: 'Tra cứu', 
+    href: '/tra-cuu', 
+    icon: Search,
+    hasSubmenu: true,
+    submenu: [
+      { name: 'Theo tiêu chuẩn', href: '/tra-cuu/tieu-chuan', icon: BookOpen },
+      { name: 'Theo loại tài liệu', href: '/tra-cuu/loai-tai-lieu', icon: FileText },
+      { name: 'Theo người ban hành', href: '/tra-cuu/nguoi-ban-hanh', icon: Users },
+      { name: 'Tìm kiếm nâng cao', href: '/tra-cuu/tim-kiem-nang-cao', icon: Search }
+    ]
+  },
+  { 
     name: 'Danh mục', 
     href: '/danh-muc', 
     icon: Folder,
@@ -199,9 +211,11 @@ function DashboardSidebar() {
                 Tạo tài liệu mới
               </SidebarMenuItem>
             </Link>
-            <SidebarMenuItem icon={<Search className="h-4 w-4" />}>
-              Tìm kiếm nâng cao
-            </SidebarMenuItem>
+            <Link href="/tra-cuu">
+              <SidebarMenuItem icon={<Search className="h-4 w-4" />}>
+                Tìm kiếm nâng cao
+              </SidebarMenuItem>
+            </Link>
           </SidebarMenu>
         </div>
       </SidebarContent>

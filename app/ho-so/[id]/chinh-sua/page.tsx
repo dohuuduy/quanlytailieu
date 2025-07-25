@@ -27,6 +27,7 @@ const formSchema = z.object({
   loai_tai_lieu_id: z.string().min(1, 'Loại tài liệu là bắt buộc'),
   nguoi_ban_hanh_id: z.string().min(1, 'Người ban hành là bắt buộc'),
   tinh_trang: z.enum(['hieu_luc', 'cho_duyet', 'het_hieu_luc']),
+  link_tai_lieu: z.string().url('Link không hợp lệ').optional().or(z.literal('')),
   ghi_chu: z.string().optional(),
 })
 
@@ -57,6 +58,7 @@ interface HoSoData {
   loai_tai_lieu_id: string
   nguoi_ban_hanh_id: string
   tinh_trang: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
+  link_tai_lieu: string | null
   ghi_chu: string | null
   tai_lieu_tieu_chuan: Array<{
     tieu_chuan_id: string
@@ -88,6 +90,7 @@ export default function ChinhSuaHoSoPage() {
       loai_tai_lieu_id: '',
       nguoi_ban_hanh_id: '',
       tinh_trang: 'cho_duyet',
+      link_tai_lieu: '',
       ghi_chu: '',
     }
   })
@@ -147,6 +150,7 @@ export default function ChinhSuaHoSoPage() {
         loai_tai_lieu_id: hoSo.loai_tai_lieu_id,
         nguoi_ban_hanh_id: hoSo.nguoi_ban_hanh_id,
         tinh_trang: hoSo.tinh_trang,
+        link_tai_lieu: hoSo.link_tai_lieu || '',
         ghi_chu: hoSo.ghi_chu || '',
       })
 
@@ -187,6 +191,7 @@ export default function ChinhSuaHoSoPage() {
           loai_tai_lieu_id: data.loai_tai_lieu_id,
           nguoi_ban_hanh_id: data.nguoi_ban_hanh_id,
           tinh_trang: data.tinh_trang,
+          link_tai_lieu: data.link_tai_lieu || null,
           ghi_chu: data.ghi_chu || null
         })
         .eq('id', hoSoId)
@@ -430,6 +435,27 @@ export default function ChinhSuaHoSoPage() {
                         <SelectItem value="het_hieu_luc">Hết hiệu lực</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="link_tai_lieu"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link tài liệu</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="https://example.com/document.pdf" 
+                        type="url"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Link đến file tài liệu (URL hoặc đường dẫn). Để trống nếu chưa có.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

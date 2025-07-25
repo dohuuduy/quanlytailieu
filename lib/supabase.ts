@@ -3,9 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
+// Singleton pattern để tránh tạo nhiều instance
+let supabaseInstance: ReturnType<typeof createClient> | null = null
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export const createSupabaseClient = () => createClient(supabaseUrl, supabaseAnonKey)
+export const createSupabaseClient = () => {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
+  }
+  return supabaseInstance
+}
 
 export type Database = {
   public: {
@@ -38,16 +46,19 @@ export type Database = {
           id: string
           ten_loai: string
           mo_ta: string | null
+          tinh_trang: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
         Insert: {
           id?: string
           ten_loai: string
           mo_ta?: string | null
+          tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
         Update: {
           id?: string
           ten_loai?: string
           mo_ta?: string | null
+          tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
       }
       tieu_chuan: {
@@ -55,16 +66,19 @@ export type Database = {
           id: string
           ten_tieu_chuan: string
           mo_ta: string | null
+          tinh_trang: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
         Insert: {
           id?: string
           ten_tieu_chuan: string
           mo_ta?: string | null
+          tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
         Update: {
           id?: string
           ten_tieu_chuan?: string
           mo_ta?: string | null
+          tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
         }
       }
       ho_so: {
@@ -79,6 +93,7 @@ export type Database = {
           loai_tai_lieu_id: string
           tinh_trang: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
           ghi_chu: string | null
+          link_tai_lieu: string | null
           ngay_tao: string
         }
         Insert: {
@@ -92,6 +107,7 @@ export type Database = {
           loai_tai_lieu_id: string
           tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
           ghi_chu?: string | null
+          link_tai_lieu?: string | null
           ngay_tao?: string
         }
         Update: {
@@ -105,6 +121,7 @@ export type Database = {
           loai_tai_lieu_id?: string
           tinh_trang?: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
           ghi_chu?: string | null
+          link_tai_lieu?: string | null
           ngay_tao?: string
         }
       }
