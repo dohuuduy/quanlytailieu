@@ -106,15 +106,15 @@ export default function LoaiTaiLieuPage() {
     try {
       const { data, error } = await supabase
         .from('ho_so')
-        .select('loai_tai_lieu_id, count()')
-        .group('loai_tai_lieu_id')
+        .select('loai_tai_lieu_id')
 
       if (error) throw error
 
       const counts: Record<string, number> = {}
       if (data) {
-        data.forEach((item: HoSoCount) => {
-          counts[item.loai_tai_lieu_id] = item.count
+        data.forEach((item: any) => {
+          const loaiTaiLieuId = item.loai_tai_lieu_id
+          counts[loaiTaiLieuId] = (counts[loaiTaiLieuId] || 0) + 1
         })
       }
       

@@ -106,15 +106,15 @@ export default function TieuChuanPage() {
     try {
       const { data, error } = await supabase
         .from('tai_lieu_tieu_chuan')
-        .select('tieu_chuan_id, count()')
-        .group('tieu_chuan_id')
+        .select('tieu_chuan_id')
 
       if (error) throw error
 
       const counts: Record<string, number> = {}
       if (data) {
-        data.forEach((item: HoSoCount) => {
-          counts[item.tieu_chuan_id] = item.count
+        data.forEach((item: any) => {
+          const tieuChuanId = item.tieu_chuan_id
+          counts[tieuChuanId] = (counts[tieuChuanId] || 0) + 1
         })
       }
       

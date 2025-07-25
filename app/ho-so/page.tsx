@@ -10,7 +10,7 @@ import { createSupabaseClient } from '@/lib/supabase'
 import { formatDate } from '@/lib/utils'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { ActionBar, ActionBarSection, ActionBarButton, ActionBarIconButton } from '@/components/ui/action-bar'
-import { Plus, Search, Edit, Trash2, Eye, Download, Filter, RefreshCw, ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react'
+import { Plus, Search, Edit, Trash2, Eye, Download, Filter, RefreshCw, ChevronUp, ChevronDown, ChevronsUpDown, ExternalLink, FileText, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 
 // Component cho header có thể sắp xếp
@@ -57,12 +57,16 @@ interface HoSo {
   ngay_het_hieu_luc: string | null
   tinh_trang: 'hieu_luc' | 'cho_duyet' | 'het_hieu_luc'
   ghi_chu: string | null
+  link_tai_lieu: string | null
   nguoi_ban_hanh: {
     ho_ten: string
   }
   loai_tai_lieu: {
     ten_loai: string
   }
+  tieu_chuan?: Array<{
+    ten_tieu_chuan: string
+  }>
 }
 
 const tinhTrangColors = {
@@ -101,7 +105,9 @@ export default function HoSoPage() {
   const fetchHoSo = async () => {
     try {
       setLoading(true)
-      const { data, error } = await supabase
+      
+      // Lấy thông tin hồ sơ cơ bản
+      const { data: hoSoData, error: hoSoError } = await supabase
         .from('ho_so')
         .select(`
           *,
@@ -110,9 +116,34 @@ export default function HoSoPage() {
         `)
         .order('ma_tai_lieu', { ascending: true })
 
-      if (error) throw error
+      if (hoSoError) throw hoSoError
 
-      setHoSoList(data || [])
+      // Lấy thông tin tiêu chuẩn cho từng hồ sơ
+      const hoSoWithTieuChuan = await Promise.all(
+        (hoSoData || []).map(async (hoSo: any) => {
+          const { data: tieuChuanData, error: tieuChuanError } = await supabase
+            .from('tai_lieu_tieu_chuan')
+            .select(`
+              tieu_chuan:tieu_chuan_id(
+                ten_tieu_chuan
+              )
+            `)
+            .eq('ho_so_id', hoSo.id)
+
+          if (tieuChuanError) {
+            console.error('Lỗi khi tải tiêu chuẩn cho hồ sơ:', hoSo.id, tieuChuanError)
+            return { ...hoSo, tieu_chuan: [] }
+          }
+
+          const tieuChuanList = tieuChuanData?.map((item: any) => ({
+            ten_tieu_chuan: item.tieu_chuan?.ten_tieu_chuan || ''
+          })).filter((tc: any) => tc.ten_tieu_chuan) || []
+
+          return { ...hoSo, tieu_chuan: tieuChuanList }
+        })
+      )
+
+      setHoSoList(hoSoWithTieuChuan)
     } catch (error) {
       console.error('Lỗi khi tải danh sách hồ sơ:', error)
       toast({
@@ -400,6 +431,8 @@ export default function HoSoPage() {
                       <SortableHeader field="tinh_trang" currentSortField={sortField} sortDirection={sortDirection} onSort={handleSort}>
                         <div className="text-center">Tình trạng</div>
                       </SortableHeader>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tiêu chuẩn áp dụng</th>
+                      <th className="h-12 px-4 text-center align-middle font-medium text-muted-foreground">File</th>
                       <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Thao tác</th>
                     </tr>
                   </thead>
@@ -429,6 +462,79 @@ export default function HoSoPage() {
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${tinhTrangColors[hoSo.tinh_trang]}`}>
                               {tinhTrangLabels[hoSo.tinh_trang]}
                             </span>
+                          </div>
+                        </td>
+                        <td className="p-4 align-middle">
+                          <div className="flex flex-wrap gap-1 max-w-[200px]">
+                            {hoSo.tieu_chuan && hoSo.tieu_chuan.length > 0 ? (
+                              hoSo.tieu_chuan.map((tc, index) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                                  title={tc.ten_tieu_chuan}
+                                >
+                                  <BookOpen className="h-3 w-3" />
+                                  <span className="truncate max-w-[80px]">{tc.ten_tieu_chuan}</span>
+                                </span>
+                              ))
+                            ) : (
+                              <span className="text-muted-foreground text-xs">Chưa có tiêu chuẩn</span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="p-4 align-middle">
+                          <div className="flex justify-center">
+                            {hoSo.link_tai_lieu ? (
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8 w-8 p-0 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                                  onClick={() => window.open(hoSo.link_tai_lieu!, '_blank')}
+                                  title="Mở file trong tab mới"
+                                >
+                                  <ExternalLink className="h-4 w-4 text-blue-600" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8 w-8 p-0 hover:bg-green-50 hover:border-green-300 transition-colors"
+                                  onClick={() => {
+                                    // Tạo iframe để preview file
+                                    const previewWindow = window.open('', '_blank', 'width=800,height=600');
+                                    if (previewWindow) {
+                                      previewWindow.document.write(`
+                                        <html>
+                                          <head>
+                                            <title>Preview: ${hoSo.ten_tai_lieu}</title>
+                                            <style>
+                                              body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+                                              .header { background: #f5f5f5; padding: 10px; margin-bottom: 20px; border-radius: 5px; }
+                                              .preview-container { width: 100%; height: calc(100vh - 100px); border: 1px solid #ddd; }
+                                              iframe { width: 100%; height: 100%; border: none; }
+                                            </style>
+                                          </head>
+                                          <body>
+                                            <div class="header">
+                                              <h3>${hoSo.ten_tai_lieu} (${hoSo.phien_ban})</h3>
+                                              <p>Mã tài liệu: ${hoSo.ma_tai_lieu}</p>
+                                            </div>
+                                            <div class="preview-container">
+                                              <iframe src="${hoSo.link_tai_lieu}" title="Document Preview"></iframe>
+                                            </div>
+                                          </body>
+                                        </html>
+                                      `);
+                                    }
+                                  }}
+                                  title="Xem trước file"
+                                >
+                                  <Eye className="h-4 w-4 text-green-600" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">Chưa có file</span>
+                            )}
                           </div>
                         </td>
                         <td className="p-4 align-middle">

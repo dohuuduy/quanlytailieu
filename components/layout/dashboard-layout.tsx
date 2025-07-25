@@ -250,77 +250,96 @@ function DashboardHeader() {
           {collapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
         </Button>
 
-        {/* Main Action Buttons - Desktop */}
+        {/* Main Navigation - Desktop */}
         <div className="hidden lg:flex items-center gap-1">
           <div className="flex items-center bg-muted/40 rounded-lg border p-1">
-            <Link href="/ho-so/tao-moi">
+            <Link href="/">
               <Button 
                 variant="ghost" 
                 size="sm" 
                 className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
               >
-                <Plus className="mr-2 h-4 w-4" />
-                Tạo mới
+                <Home className="mr-2 h-4 w-4" />
+                Home
+              </Button>
+            </Link>
+            <Link href="/ho-so">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Tài liệu
               </Button>
             </Link>
             <Button 
               variant="ghost" 
               size="sm" 
               className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
+              disabled
+              title="Tính năng sẽ phát triển sau"
             >
-              <Download className="mr-2 h-4 w-4" />
-              Xuất
+              <BookOpen className="mr-2 h-4 w-4" />
+              Đào tạo
             </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
-            >
-              <Search className="mr-2 h-4 w-4" />
-              Tìm kiếm
-            </Button>
+            <Link href="/lich-danh-gia">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
+              >
+                <CheckSquare className="mr-2 h-4 w-4" />
+                Lịch đánh giá
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Compact Action Buttons - Tablet */}
+        {/* Compact Navigation - Tablet */}
         <div className="hidden md:flex lg:hidden items-center gap-2">
-          <Link href="/ho-so/tao-moi">
+          <Link href="/">
             <Button 
               variant="outline" 
               size="sm" 
               className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
             >
-              <Plus className="mr-2 h-4 w-4" />
-              Tạo mới
+              <Home className="mr-2 h-4 w-4" />
+              Home
             </Button>
           </Link>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Xuất
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-10 w-10 hover:bg-accent/80 transition-colors"
-          >
-            <Search className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Mobile Action Buttons */}
-        <div className="flex md:hidden items-center gap-2">
-          <Link href="/ho-so/tao-moi">
+          <Link href="/ho-so">
             <Button 
               variant="outline" 
               size="sm" 
               className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
             >
-              <Plus className="mr-2 h-4 w-4" />
-              Tạo mới
+              <FileText className="mr-2 h-4 w-4" />
+              Tài liệu
+            </Button>
+          </Link>
+          <Link href="/lich-danh-gia">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="h-10 w-10 hover:bg-accent/80 transition-colors"
+              title="Lịch đánh giá"
+            >
+              <CheckSquare className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="flex md:hidden items-center gap-2">
+          <Link href="/">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
+            >
+              <Home className="mr-2 h-4 w-4" />
+              Home
             </Button>
           </Link>
           
@@ -328,22 +347,38 @@ function DashboardHeader() {
             <MenubarMenu>
               <MenubarTrigger className="px-4 py-2 text-sm h-10 border rounded-md font-medium hover:bg-accent/80 transition-colors">
                 <Menu className="mr-2 h-4 w-4" />
-                Thêm
+                Menu
               </MenubarTrigger>
               <MenubarContent>
-                <MenubarItem className="cursor-pointer">
-                  <Download className="mr-2 h-4 w-4" />
-                  Xuất file
+                <Link href="/ho-so">
+                  <MenubarItem className="cursor-pointer">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Tài liệu
+                  </MenubarItem>
+                </Link>
+                <MenubarItem className="cursor-pointer" disabled>
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Đào tạo (Sắp có)
                 </MenubarItem>
-                <MenubarItem className="cursor-pointer">
-                  <Search className="mr-2 h-4 w-4" />
-                  Tìm kiếm nâng cao
-                </MenubarItem>
+                <Link href="/lich-danh-gia">
+                  <MenubarItem className="cursor-pointer">
+                    <CheckSquare className="mr-2 h-4 w-4" />
+                    Lịch đánh giá
+                  </MenubarItem>
+                </Link>
                 <MenubarSeparator />
-                <MenubarItem className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Cài đặt
-                </MenubarItem>
+                <Link href="/ho-so/tao-moi">
+                  <MenubarItem className="cursor-pointer">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Tạo tài liệu mới
+                  </MenubarItem>
+                </Link>
+                <Link href="/tra-cuu">
+                  <MenubarItem className="cursor-pointer">
+                    <Search className="mr-2 h-4 w-4" />
+                    Tìm kiếm nâng cao
+                  </MenubarItem>
+                </Link>
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
