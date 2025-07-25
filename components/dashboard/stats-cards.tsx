@@ -5,6 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FileText, CheckCircle, Clock, AlertTriangle, TrendingUp } from 'lucide-react'
 import { createSupabaseClient } from '@/lib/supabase'
 
+interface Document {
+  id: string
+  tinh_trang: string
+  ngay_het_hieu_luc: string | null
+}
+
 interface StatsCardProps {
   title: string
   value: string | number
@@ -65,6 +71,8 @@ export function StatsCards() {
         .from('ho_so')
         .select('id, tinh_trang, ngay_het_hieu_luc')
 
+      const typedDocuments = documents as Document[] | null
+
       if (error) throw error
 
       // Tính toán thống kê
@@ -73,10 +81,10 @@ export function StatsCards() {
       const thirtyDaysFromNow = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
 
       const statistics = {
-        total: documents?.length || 0,
-        hieu_luc: documents?.filter(doc => doc.tinh_trang === 'hieu_luc').length || 0,
-        cho_duyet: documents?.filter(doc => doc.tinh_trang === 'cho_duyet').length || 0,
-        expiring: documents?.filter(doc => {
+        total: typedDocuments?.length || 0,
+        hieu_luc: typedDocuments?.filter(doc => doc.tinh_trang === 'hieu_luc').length || 0,
+        cho_duyet: typedDocuments?.filter(doc => doc.tinh_trang === 'cho_duyet').length || 0,
+        expiring: typedDocuments?.filter(doc => {
           if (!doc.ngay_het_hieu_luc || doc.tinh_trang !== 'hieu_luc') return false
           const expiryDate = new Date(doc.ngay_het_hieu_luc)
           expiryDate.setHours(0, 0, 0, 0)
