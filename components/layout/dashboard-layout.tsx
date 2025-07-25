@@ -356,7 +356,7 @@ function DashboardHeader() {
                     Tài liệu
                   </MenubarItem>
                 </Link>
-                <MenubarItem className="cursor-pointer" disabled>
+                <MenubarItem className="cursor-not-allowed opacity-50">
                   <BookOpen className="mr-2 h-4 w-4" />
                   Đào tạo (Sắp có)
                 </MenubarItem>

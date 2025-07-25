@@ -28,6 +28,14 @@ interface ToChucOption {
   label: string
 }
 
+interface AuditorData {
+  auditor: string
+}
+
+interface OrgData {
+  to_chuc_danh_gia: string
+}
+
 export default function TaoMoiLichDanhGiaPage() {
   const [formData, setFormData] = useState({
     tieu_chuan_id: '',
@@ -90,14 +98,17 @@ export default function TaoMoiLichDanhGiaPage() {
       if (orgError) throw orgError
 
       // Create unique auditor options
-      const uniqueAuditors = [...new Set(auditorData?.map(item => item.auditor) || [])]
+      const typedAuditorData = auditorData as AuditorData[] | null
+      const typedOrgData = orgData as OrgData[] | null
+      
+      const uniqueAuditors = Array.from(new Set(typedAuditorData?.map(item => item.auditor) || []))
       const auditorOptions = uniqueAuditors.map(auditor => ({
         value: auditor,
         label: auditor
       }))
 
       // Create unique organization options
-      const uniqueOrgs = [...new Set(orgData?.map(item => item.to_chuc_danh_gia) || [])]
+      const uniqueOrgs = Array.from(new Set(typedOrgData?.map(item => item.to_chuc_danh_gia) || []))
       const orgOptions = uniqueOrgs.map(org => ({
         value: org,
         label: org

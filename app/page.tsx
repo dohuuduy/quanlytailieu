@@ -2,12 +2,8 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { StatsCards } from '@/components/dashboard/stats-cards'
 import { NewDocumentsTable } from '@/components/dashboard/new-documents-table'
 import { ExpiringDocumentsTable } from '@/components/dashboard/expiring-documents-table'
-import { EnhancedActivityFeed } from '@/components/dashboard/enhanced-activity-feed'
 import { EvaluationScheduleTable } from '@/components/dashboard/evaluation-schedule-table'
 import { QuickActions } from '@/components/dashboard/quick-actions'
-import { StatisticsDebug } from '@/components/debug/statistics-debug'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 
 export default function HomePage() {
   return (
@@ -20,13 +16,6 @@ export default function HomePage() {
             <p className="text-gray-600 mt-2">
               Chào mừng bạn đến với hệ thống quản lý hồ sơ tài liệu doanh nghiệp
             </p>
-          </div>
-          <div className="flex gap-2">
-            <Link href="/test-db">
-              <Button variant="outline" size="sm">
-                🔧 Debug DB
-              </Button>
-            </Link>
           </div>
         </div>
 
@@ -46,16 +35,10 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Evaluation Schedule */}
           <EvaluationScheduleTable />
-          
-          {/* Enhanced Activity Feed */}
-          <EnhancedActivityFeed />
         </div>
 
         {/* Quick Actions */}
         <QuickActions />
-
-        {/* Debug Component */}
-        <StatisticsDebug />
       </div>
     </DashboardLayout>
   )
