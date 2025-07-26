@@ -238,14 +238,14 @@ function DashboardHeader() {
   const { collapsed, setCollapsed } = useSidebar()
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-3 sm:px-4 lg:px-6">
       {/* Left section - Menu toggle and main actions */}
-      <div className="flex items-center gap-3 min-w-0 flex-1">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="h-10 w-10 shrink-0 hover:bg-accent/80 transition-colors"
+          className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 hover:bg-accent/80 transition-colors"
         >
           {collapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
         </Button>
@@ -276,7 +276,7 @@ function DashboardHeader() {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200"
+              className="h-8 px-3 text-sm font-medium hover:bg-background hover:shadow-sm transition-all duration-200 cursor-not-allowed opacity-50"
               disabled
               title="Tính năng sẽ phát triển sau"
             >
@@ -302,9 +302,9 @@ function DashboardHeader() {
             <Button 
               variant="outline" 
               size="sm" 
-              className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
+              className="h-9 px-3 text-sm font-medium hover:bg-accent/80 transition-colors"
             >
-              <Home className="mr-2 h-4 w-4" />
+              <Home className="mr-1.5 h-4 w-4" />
               Home
             </Button>
           </Link>
@@ -312,9 +312,9 @@ function DashboardHeader() {
             <Button 
               variant="outline" 
               size="sm" 
-              className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
+              className="h-9 px-3 text-sm font-medium hover:bg-accent/80 transition-colors"
             >
-              <FileText className="mr-2 h-4 w-4" />
+              <FileText className="mr-1.5 h-4 w-4" />
               Tài liệu
             </Button>
           </Link>
@@ -322,7 +322,7 @@ function DashboardHeader() {
             <Button 
               variant="outline" 
               size="icon" 
-              className="h-10 w-10 hover:bg-accent/80 transition-colors"
+              className="h-9 w-9 hover:bg-accent/80 transition-colors"
               title="Lịch đánh giá"
             >
               <CheckSquare className="h-4 w-4" />
@@ -330,36 +330,27 @@ function DashboardHeader() {
           </Link>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="flex md:hidden items-center gap-2">
-          <Link href="/">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="h-10 px-4 font-medium hover:bg-accent/80 transition-colors"
-            >
-              <Home className="mr-2 h-4 w-4" />
-              Home
-            </Button>
-          </Link>
-          
-          <Menubar className="border-0 bg-transparent p-0 h-10">
+        {/* Mobile Navigation - Simplified */}
+        <div className="flex md:hidden items-center gap-1.5">
+          <Menubar className="border-0 bg-transparent p-0 h-9">
             <MenubarMenu>
-              <MenubarTrigger className="px-4 py-2 text-sm h-10 border rounded-md font-medium hover:bg-accent/80 transition-colors">
-                <Menu className="mr-2 h-4 w-4" />
-                Menu
+              <MenubarTrigger className="px-3 py-2 text-sm h-9 border rounded-md font-medium hover:bg-accent/80 transition-colors">
+                <Menu className="mr-1.5 h-4 w-4" />
+                <span className="hidden xs:inline">Menu</span>
               </MenubarTrigger>
-              <MenubarContent>
+              <MenubarContent className="w-56">
+                <Link href="/">
+                  <MenubarItem className="cursor-pointer">
+                    <Home className="mr-2 h-4 w-4" />
+                    Trang chủ
+                  </MenubarItem>
+                </Link>
                 <Link href="/ho-so">
                   <MenubarItem className="cursor-pointer">
                     <FileText className="mr-2 h-4 w-4" />
-                    Tài liệu
+                    Hồ sơ tài liệu
                   </MenubarItem>
                 </Link>
-                <MenubarItem className="cursor-not-allowed opacity-50">
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  Đào tạo (Sắp có)
-                </MenubarItem>
                 <Link href="/lich-danh-gia">
                   <MenubarItem className="cursor-pointer">
                     <CheckSquare className="mr-2 h-4 w-4" />
@@ -376,7 +367,7 @@ function DashboardHeader() {
                 <Link href="/tra-cuu">
                   <MenubarItem className="cursor-pointer">
                     <Search className="mr-2 h-4 w-4" />
-                    Tìm kiếm nâng cao
+                    Tìm kiếm
                   </MenubarItem>
                 </Link>
               </MenubarContent>
@@ -386,7 +377,7 @@ function DashboardHeader() {
       </div>
 
       {/* Right section - Search and user actions */}
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         {/* Search - Desktop only */}
         <div className="relative hidden xl:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -397,11 +388,11 @@ function DashboardHeader() {
         </div>
         
         {/* User action buttons */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 sm:gap-1">
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-10 w-10 shrink-0 hover:bg-accent/80 transition-colors"
+            className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 hover:bg-accent/80 transition-colors"
           >
             <Bell className="h-4 w-4" />
           </Button>
@@ -409,7 +400,7 @@ function DashboardHeader() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-10 w-10 shrink-0 hover:bg-accent/80 transition-colors"
+            className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 hover:bg-accent/80 transition-colors"
           >
             <User className="h-4 w-4" />
           </Button>
