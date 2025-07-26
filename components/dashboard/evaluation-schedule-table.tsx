@@ -126,25 +126,25 @@ export function EvaluationScheduleTable() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-purple-600" />
-          Lịch đánh giá sắp tới
+      <CardHeader className="flex flex-col gap-3 pb-4">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+          <span className="truncate">Lịch đánh giá sắp tới</span>
           {evaluations.length > 0 && (
-            <Badge variant="secondary" className="ml-2">
+            <Badge variant="secondary" className="text-xs">
               {evaluations.length}
             </Badge>
           )}
         </CardTitle>
-        <div className="flex gap-2">
-          <Link href="/lich-danh-gia/tao-moi">
-            <Button variant="outline" size="sm">
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Link href="/lich-danh-gia/tao-moi" className="flex-1 sm:flex-none">
+            <Button variant="outline" size="sm" className="w-full">
               <Plus className="h-4 w-4 mr-2" />
               Thêm lịch
             </Button>
           </Link>
-          <Link href="/lich-danh-gia">
-            <Button variant="outline" size="sm">
+          <Link href="/lich-danh-gia" className="flex-1 sm:flex-none">
+            <Button variant="outline" size="sm" className="w-full">
               Xem tất cả
             </Button>
           </Link>
@@ -163,49 +163,54 @@ export function EvaluationScheduleTable() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {evaluations.map((evaluation) => {
               const daysUntilStart = getDaysUntilStart(evaluation.ngay_du_kien)
-              const actualStartDate = evaluation.ngay_bat_dau_thuc_te || evaluation.ngay_du_kien
-              const actualEndDate = evaluation.ngay_ket_thuc_thuc_te
 
               return (
-                <div key={evaluation.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors">
+                <div key={evaluation.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg hover:bg-muted/30 transition-colors gap-3 sm:gap-0">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-medium text-sm truncate">
+                    {/* Title and status */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                      <h4 className="font-medium text-sm line-clamp-2 sm:truncate flex-1">
                         Đánh giá {evaluation.tieu_chuan?.ten_tieu_chuan || 'Tiêu chuẩn'}
                       </h4>
-                      <Badge variant="outline" className={`text-xs ${trangThaiColors[evaluation.trang_thai]}`}>
+                      <Badge variant="outline" className={`text-xs shrink-0 ${trangThaiColors[evaluation.trang_thai]}`}>
                         {trangThaiLabels[evaluation.trang_thai]}
                       </Badge>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground mb-2">
+                    {/* Schedule info - Stack on mobile */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground mb-2">
                       <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {evaluation.ngay_bat_dau_thuc_te && evaluation.ngay_ket_thuc_thuc_te
-                          ? formatDateRange(evaluation.ngay_bat_dau_thuc_te, evaluation.ngay_ket_thuc_thuc_te)
-                          : `Dự kiến: ${formatDate(evaluation.ngay_du_kien)}`
-                        }
+                        <Calendar className="h-3 w-3 shrink-0" />
+                        <span className="truncate">
+                          {evaluation.ngay_bat_dau_thuc_te && evaluation.ngay_ket_thuc_thuc_te
+                            ? formatDateRange(evaluation.ngay_bat_dau_thuc_te, evaluation.ngay_ket_thuc_thuc_te)
+                            : `Dự kiến: ${formatDate(evaluation.ngay_du_kien)}`
+                          }
+                        </span>
                       </span>
                       {evaluation.auditor && (
                         <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {evaluation.auditor}
+                          <Clock className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{evaluation.auditor}</span>
                         </span>
                       )}
                       {evaluation.trang_thai === 'ke_hoach' && daysUntilStart >= 0 && (
                         <span className={`flex items-center gap-1 ${daysUntilStart <= 7 ? 'text-red-600' : 'text-orange-600'}`}>
-                          <AlertCircle className="h-3 w-3" />
-                          {daysUntilStart === 0 ? 'Hôm nay' :
-                            daysUntilStart === 1 ? 'Ngày mai' :
-                              `${daysUntilStart} ngày nữa`}
+                          <AlertCircle className="h-3 w-3 shrink-0" />
+                          <span>
+                            {daysUntilStart === 0 ? 'Hôm nay' :
+                              daysUntilStart === 1 ? 'Ngày mai' :
+                                `${daysUntilStart} ngày nữa`}
+                          </span>
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-2 mb-2">
+                    {/* Tags */}
+                    <div className="flex items-center gap-2 flex-wrap mb-2">
                       {evaluation.tieu_chuan?.ten_tieu_chuan && (
                         <Badge variant="secondary" className="text-xs">
                           {evaluation.tieu_chuan.ten_tieu_chuan}
@@ -218,17 +223,20 @@ export function EvaluationScheduleTable() {
                       )}
                     </div>
 
+                    {/* Notes */}
                     {evaluation.ghi_chu && (
-                      <p className="text-xs text-muted-foreground italic">
+                      <p className="text-xs text-muted-foreground italic line-clamp-2">
                         {evaluation.ghi_chu}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 ml-4">
+                  {/* Action button */}
+                  <div className="flex items-center justify-end sm:ml-4">
                     <Link href={`/lich-danh-gia/${evaluation.id}`}>
-                      <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                        <Eye className="h-4 w-4" />
+                      <Button variant="outline" size="sm" className="h-8 w-full sm:w-8 sm:p-0">
+                        <Eye className="h-4 w-4 sm:mr-0 mr-2" />
+                        <span className="sm:hidden">Xem chi tiết</span>
                       </Button>
                     </Link>
                   </div>

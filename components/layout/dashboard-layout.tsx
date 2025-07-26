@@ -423,11 +423,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
       <div className="flex h-screen bg-background">
-        <DashboardSidebar />
+        {/* Sidebar - Hidden on mobile, overlay on tablet */}
+        <div className="hidden md:block">
+          <DashboardSidebar />
+        </div>
+        
         <div className="flex flex-1 flex-col overflow-hidden">
           <DashboardHeader />
-          <main className="flex-1 overflow-auto p-4 lg:p-6">
-            <div className="mx-auto max-w-7xl">
+          <main className="flex-1 overflow-auto p-2 sm:p-4 lg:p-6">
+            <div className="mx-auto max-w-7xl w-full">
               {children}
             </div>
           </main>

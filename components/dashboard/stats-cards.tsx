@@ -24,17 +24,21 @@ interface StatsCardProps {
 
 function StatsCard({ title, value, description, icon, trend }: StatsCardProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="h-4 w-4 text-muted-foreground">
+    <Card className="hover:shadow-md transition-shadow">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+        <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground truncate pr-2">
+          {title}
+        </CardTitle>
+        <div className="h-4 w-4 text-muted-foreground shrink-0">
           {icon}
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+        <div className="text-xl sm:text-2xl font-bold mb-1">{value}</div>
         {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-tight">
+            {description}
+          </p>
         )}
         {trend && (
           <div className="flex items-center pt-1">
@@ -42,7 +46,7 @@ function StatsCard({ title, value, description, icon, trend }: StatsCardProps) {
             <span className={`text-xs ml-1 ${trend.isPositive ? 'text-green-500' : 'text-red-500'}`}>
               {trend.isPositive ? '+' : ''}{trend.value}%
             </span>
-            <span className="text-xs text-muted-foreground ml-1">so với tháng trước</span>
+            <span className="text-xs text-muted-foreground ml-1 hidden sm:inline">so với tháng trước</span>
           </div>
         )}
       </CardContent>
@@ -103,14 +107,16 @@ export function StatsCards() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Đang tải...</CardTitle>
+          <Card key={i} className="animate-pulse">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+              <div className="h-3 bg-muted rounded w-16"></div>
+              <div className="h-4 w-4 bg-muted rounded"></div>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">-</div>
+            <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+              <div className="h-6 sm:h-8 bg-muted rounded w-12 mb-2"></div>
+              <div className="h-3 bg-muted rounded w-full"></div>
             </CardContent>
           </Card>
         ))}
@@ -119,7 +125,7 @@ export function StatsCards() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
       <StatsCard
         title="Tổng tài liệu"
         value={stats.total}

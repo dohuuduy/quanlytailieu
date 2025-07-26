@@ -53,26 +53,26 @@ const quickActions = [
 export function QuickActions() {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Thao tác nhanh</CardTitle>
-        <CardDescription>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base sm:text-lg">Thao tác nhanh</CardTitle>
+        <CardDescription className="text-sm">
           Các chức năng thường dùng để tăng hiệu quả làm việc
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {quickActions.map((action) => (
             <Link key={action.title} href={action.href} className="block">
-              <div className="group relative overflow-hidden rounded-lg border p-4 hover:shadow-md hover:border-primary/20 transition-all duration-200 cursor-pointer h-full min-h-[120px]">
-                <div className="flex flex-col items-center text-center space-y-3 h-full justify-center">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-lg text-white ${action.color} transition-all duration-200 group-hover:scale-110 flex-shrink-0`}>
-                    <action.icon className="h-6 w-6" />
+              <div className="group relative overflow-hidden rounded-lg border p-3 sm:p-4 hover:shadow-md hover:border-primary/20 transition-all duration-200 cursor-pointer h-full min-h-[100px] sm:min-h-[120px]">
+                <div className="flex flex-col items-center text-center space-y-2 sm:space-y-3 h-full justify-center">
+                  <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg text-white ${action.color} transition-all duration-200 group-hover:scale-110 flex-shrink-0`}>
+                    <action.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <div className="flex-1 flex flex-col justify-center space-y-1">
-                    <h3 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
+                    <h3 className="font-medium text-xs sm:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
                       {action.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-tight">
+                    <p className="text-xs text-muted-foreground leading-tight line-clamp-2 hidden sm:block">
                       {action.description}
                     </p>
                   </div>

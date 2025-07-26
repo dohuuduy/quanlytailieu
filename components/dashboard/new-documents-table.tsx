@@ -106,13 +106,13 @@ export function NewDocumentsTable() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-blue-600" />
-          Tài liệu mới ban hành
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+          <span className="truncate">Tài liệu mới ban hành</span>
         </CardTitle>
         <Link href="/ho-so">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto">
             Xem tất cả
           </Button>
         </Link>
@@ -124,43 +124,55 @@ export function NewDocumentsTable() {
             <p className="text-muted-foreground">Không có tài liệu mới trong 30 ngày qua</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {documents.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors">
+              <div key={doc.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg hover:bg-muted/30 transition-colors gap-3 sm:gap-0">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="font-medium text-sm truncate">{doc.ten_tai_lieu}</h4>
-                    <Badge variant="outline" className="text-xs">
-                      {doc.phien_ban}
-                    </Badge>
-                    <Badge variant="outline" className={`text-xs ${tinhTrangColors[doc.tinh_trang]}`}>
-                      {tinhTrangLabels[doc.tinh_trang]}
-                    </Badge>
+                  {/* Title and badges */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <h4 className="font-medium text-sm line-clamp-2 sm:truncate flex-1">
+                      {doc.ten_tai_lieu}
+                    </h4>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge variant="outline" className="text-xs shrink-0">
+                        {doc.phien_ban}
+                      </Badge>
+                      <Badge variant="outline" className={`text-xs shrink-0 ${tinhTrangColors[doc.tinh_trang]}`}>
+                        {tinhTrangLabels[doc.tinh_trang]}
+                      </Badge>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  
+                  {/* Document info - Stack on mobile, inline on desktop */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground mb-2">
                     <span className="flex items-center gap-1">
-                      <FileText className="h-3 w-3" />
-                      {doc.ma_tai_lieu}
+                      <FileText className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{doc.ma_tai_lieu}</span>
                     </span>
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {formatDate(doc.ngay_ban_hanh)}
+                      <Calendar className="h-3 w-3 shrink-0" />
+                      <span>{formatDate(doc.ngay_ban_hanh)}</span>
                     </span>
                     <span className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
-                      {doc.nguoi_ban_hanh?.ho_ten}
+                      <User className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{doc.nguoi_ban_hanh?.ho_ten}</span>
                     </span>
                   </div>
-                  <div className="mt-1">
+                  
+                  {/* Document type */}
+                  <div>
                     <Badge variant="secondary" className="text-xs">
                       {doc.loai_tai_lieu?.ten_loai}
                     </Badge>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 ml-4">
+                
+                {/* Action button */}
+                <div className="flex items-center justify-end sm:ml-4">
                   <Link href={`/ho-so/${doc.id}`}>
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                      <Eye className="h-4 w-4" />
+                    <Button variant="outline" size="sm" className="h-8 w-full sm:w-8 sm:p-0">
+                      <Eye className="h-4 w-4 sm:mr-0 mr-2" />
+                      <span className="sm:hidden">Xem chi tiết</span>
                     </Button>
                   </Link>
                 </div>

@@ -10,10 +10,10 @@ export default function HomePage() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">Dashboard</h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2 line-clamp-2">
               Chào mừng bạn đến với hệ thống quản lý hồ sơ tài liệu doanh nghiệp
             </p>
           </div>
@@ -23,7 +23,7 @@ export default function HomePage() {
         <StatsCards />
 
         {/* Main Content - Document Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* New Documents */}
           <NewDocumentsTable />
           
@@ -32,7 +32,7 @@ export default function HomePage() {
         </div>
 
         {/* Secondary Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Evaluation Schedule */}
           <EvaluationScheduleTable />
         </div>

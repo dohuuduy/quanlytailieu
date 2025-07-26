@@ -257,33 +257,33 @@ export default function TaoMoiLichDanhGiaPage() {
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <Link href="/lich-danh-gia">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="w-fit">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Quay lại
             </Button>
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Tạo lịch đánh giá mới
             </h1>
-            <p className="text-gray-600 mt-1">Tạo lịch trình đánh giá theo tiêu chuẩn</p>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">Tạo lịch trình đánh giá theo tiêu chuẩn</p>
           </div>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Form Section - 2/3 width */}
           <div className="lg:col-span-2">
             <Card className="shadow-lg border-0 bg-white">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b">
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <Calendar className="h-6 w-6 text-blue-600" />
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b p-4 sm:p-6">
+                <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   Thông tin lịch đánh giá
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
                 <form onSubmit={handleSubmit} className="space-y-8">
                   {/* Basic Information Section */}
                   <div className="space-y-6">
@@ -471,15 +471,15 @@ export default function TaoMoiLichDanhGiaPage() {
 
           {/* Sidebar - 1/3 width */}
           <div className="lg:col-span-1">
-            <div className="space-y-6 sticky top-6">
+            <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-6">
               {/* Help Card */}
               <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-purple-50">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-blue-800">
+                <CardHeader className="pb-3 sm:pb-4 p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg text-blue-800">
                     💡 Hướng dẫn
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-sm text-blue-700">
+                <CardContent className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-blue-700 p-4 sm:p-6 pt-0">
                   <div>
                     <h4 className="font-semibold mb-2">Thông tin bắt buộc:</h4>
                     <ul className="space-y-1 text-blue-600">
@@ -501,26 +501,26 @@ export default function TaoMoiLichDanhGiaPage() {
 
               {/* Status Guide */}
               <Card className="shadow-lg border-0">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-gray-800">
+                <CardHeader className="pb-3 sm:pb-4 p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg text-gray-800">
                     📋 Trạng thái
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm">
+                <CardContent className="space-y-2 sm:space-y-3 text-xs sm:text-sm p-4 sm:p-6 pt-0">
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-blue-500 shrink-0"></div>
                     <span><strong>Kế hoạch:</strong> Chưa bắt đầu</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500 shrink-0"></div>
                     <span><strong>Đang thực hiện:</strong> Đang tiến hành</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500 shrink-0"></div>
                     <span><strong>Hoàn thành:</strong> Đã kết thúc</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-red-500 shrink-0"></div>
                     <span><strong>Hủy bỏ:</strong> Không thực hiện</span>
                   </div>
                 </CardContent>
@@ -528,12 +528,12 @@ export default function TaoMoiLichDanhGiaPage() {
 
               {/* Quick Tips */}
               <Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-green-800">
+                <CardHeader className="pb-3 sm:pb-4 p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg text-green-800">
                     ⚡ Mẹo nhanh
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm text-green-700">
+                <CardContent className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-green-700 p-4 sm:p-6 pt-0">
                   <p>• Sử dụng Ctrl+S để lưu nhanh</p>
                   <p>• Có thể chỉnh sửa sau khi tạo</p>
                   <p>• Kiểm tra lại thông tin trước khi lưu</p>
