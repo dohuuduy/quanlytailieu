@@ -36,14 +36,14 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-import { 
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger,
-} from '@/components/ui/menubar'
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -296,83 +296,85 @@ function DashboardHeader() {
           </div>
         </div>
 
-        {/* Compact Navigation - Tablet */}
-        <div className="hidden md:flex lg:hidden items-center gap-2">
-          <Link href="/">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="h-9 px-3 text-sm font-medium hover:bg-accent/80 transition-colors"
-            >
-              <Home className="mr-1.5 h-4 w-4" />
-              Home
-            </Button>
-          </Link>
-          <Link href="/ho-so">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="h-9 px-3 text-sm font-medium hover:bg-accent/80 transition-colors"
-            >
-              <FileText className="mr-1.5 h-4 w-4" />
-              Tài liệu
-            </Button>
-          </Link>
-          <Link href="/lich-danh-gia">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="h-9 w-9 hover:bg-accent/80 transition-colors"
-              title="Lịch đánh giá"
-            >
-              <CheckSquare className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-
-        {/* Mobile Navigation - Simplified */}
-        <div className="flex md:hidden items-center gap-1.5">
-          <Menubar className="border-0 bg-transparent p-0 h-9">
-            <MenubarMenu>
-              <MenubarTrigger className="px-3 py-2 text-sm h-9 border rounded-md font-medium hover:bg-accent/80 transition-colors">
-                <Menu className="mr-1.5 h-4 w-4" />
-                <span className="hidden xs:inline">Menu</span>
-              </MenubarTrigger>
-              <MenubarContent className="w-56">
-                <Link href="/">
-                  <MenubarItem className="cursor-pointer">
-                    <Home className="mr-2 h-4 w-4" />
-                    Trang chủ
-                  </MenubarItem>
-                </Link>
-                <Link href="/ho-so">
-                  <MenubarItem className="cursor-pointer">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Hồ sơ tài liệu
-                  </MenubarItem>
-                </Link>
-                <Link href="/lich-danh-gia">
-                  <MenubarItem className="cursor-pointer">
-                    <CheckSquare className="mr-2 h-4 w-4" />
-                    Lịch đánh giá
-                  </MenubarItem>
-                </Link>
-                <MenubarSeparator />
-                <Link href="/ho-so/tao-moi">
-                  <MenubarItem className="cursor-pointer">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Tạo tài liệu mới
-                  </MenubarItem>
-                </Link>
-                <Link href="/tra-cuu">
-                  <MenubarItem className="cursor-pointer">
-                    <Search className="mr-2 h-4 w-4" />
-                    Tìm kiếm
-                  </MenubarItem>
-                </Link>
-              </MenubarContent>
-            </MenubarMenu>
-          </Menubar>
+        {/* Mobile & Tablet Navigation - Navigation Menu */}
+        <div className="flex lg:hidden items-center">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="h-9 px-2.5 sm:px-3 text-sm font-medium">
+                  <Menu className="h-4 w-4 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Menu</span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-56 p-2">
+                    <div className="grid gap-1">
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <Home className="h-4 w-4" />
+                          Trang chủ
+                        </Link>
+                      </NavigationMenuLink>
+                      
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/ho-so" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <FileText className="h-4 w-4" />
+                          Hồ sơ tài liệu
+                        </Link>
+                      </NavigationMenuLink>
+                      
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/lich-danh-gia" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <CheckSquare className="h-4 w-4" />
+                          Lịch đánh giá
+                        </Link>
+                      </NavigationMenuLink>
+                      
+                      <div className="h-px bg-border my-1" />
+                      
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/ho-so/tao-moi" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Tạo tài liệu mới
+                        </Link>
+                      </NavigationMenuLink>
+                      
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/tra-cuu" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <Search className="h-4 w-4" />
+                          Tìm kiếm
+                        </Link>
+                      </NavigationMenuLink>
+                      
+                      <NavigationMenuLink asChild>
+                        <Link 
+                          href="/nguoi-dung" 
+                          className="flex items-center gap-2 rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <Users className="h-4 w-4" />
+                          Người dùng
+                        </Link>
+                      </NavigationMenuLink>
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </div>
 
